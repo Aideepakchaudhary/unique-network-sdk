@@ -91,7 +91,7 @@ const createCollection = async () => {    // create a new collection
   console.log(collectionCreationResult.parsed)
 }
 
-const minToken = async () => {
+const minToken = async () => {     // Mint token
   const account = accountRef.value
   if(!account) {
     throw new Error('no account')
