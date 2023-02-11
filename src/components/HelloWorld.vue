@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import {Sdk} from "@unique-nft/sdk";
+import {Sdk, TokenByIdResponse} from "@unique-nft/sdk";
 import {IPolkadotExtensionAccount, Polkadot} from "@unique-nft/utils/extension";
 
 const sdk = new Sdk({
@@ -91,7 +91,7 @@ const createCollection = async () => {    // create a new collection
   console.log(collectionCreationResult.parsed)
 }
 
-const minToken = async () => {     // Mint token
+const mintToken = async () => {     // Mint token
   const account = accountRef.value
   if(!account) {
     throw new Error('no account')
@@ -118,6 +118,18 @@ const minToken = async () => {     // Mint token
 }
 
 
+const tokenRef = ref<TokenByIdResponse | null> (null)
+const getToken = async (collectionId: number, tokenId: number) => {       // get a token
+  const token = await sdk.tokens.get({
+    collectionId,
+    tokenId,
+  })
+  tokenRef.value = token
+
+  console.log(token)
+}
+
+
 </script>
 
 <template>
@@ -126,8 +138,8 @@ Hello Unique!
   <br/><button @click = "getMyBalance">Get My Balance</button><br/>
   <br/><button @click = "transferBalance">Transfer Balance</button><br/>
   <br/><button @click = "createCollection">Create Collection</button><br/>
-  <br/><button @click = "minToken">MintToken</button><br/>
-
+  <br/><button @click = "mintToken">MintToken</button><br/>
+  <br/><button @click = "getToken(382,1)">Get Token</button><br/>
 
 </template>
 
