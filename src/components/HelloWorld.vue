@@ -50,6 +50,25 @@ const transferBalance = async () => {
 
 }
 
+const transferToken = async () => {
+  const account = accountRef.value
+
+  if(!account) {
+    throw new Error('no account')
+  }
+
+  const transferToken = await sdk.tokens.transfer.submitWaitResult({
+    address: account.address,
+    to: '5EL9nwBv52s8WE1dpoGN9g7BfLqW2Uzn32cqPp873TvoWg8N',
+    collectionId: 467,
+    tokenId: 1,
+  }, {
+    signer: account.uniqueSdkSigner   // Make the transaction signed
+  })
+
+  console.log(transferToken.parsed)
+}
+
 const createCollection = async () => {    // create a new collection
   const account = accountRef.value
   if(!account) {
@@ -61,6 +80,12 @@ const createCollection = async () => {    // create a new collection
     name: 'Demo collection1',
     description: 'My test collection',
     tokenPrefix: 'DEEP',
+    permissions: {
+      nesting: {
+        tokenOwner: true,
+        collectionAdmin: true,
+      }
+    },
     schema: {     // need to explore
       schemaName: 'unique',
       schemaVersion: '1.0.0',
@@ -97,7 +122,7 @@ const mintToken = async () => {     // Mint token
     throw new Error('no account')
   }
 
-  const collectionId = 382
+  const collectionId = 467
 
   const tokenResult = await sdk.tokens.create.submitWaitResult( {
     address: account.address,
@@ -116,6 +141,7 @@ const mintToken = async () => {     // Mint token
 
   console.log(tokenResult.parsed)
 }
+
 
 
 const tokenRef = ref<TokenByIdResponse | null> (null)
@@ -139,7 +165,9 @@ Hello Unique!
   <br/><button @click = "transferBalance">Transfer Balance</button><br/>
   <br/><button @click = "createCollection">Create Collection</button><br/>
   <br/><button @click = "mintToken">MintToken</button><br/>
-  <br/><button @click = "getToken(382,1)">Get Token</button><br/>
+  <br/><button @click = "getToken(467,1)">Get Token</button><br/>
+  <br/><button @click = "transferToken">Transfer Token</button><br/>
+
 
 </template>
 
