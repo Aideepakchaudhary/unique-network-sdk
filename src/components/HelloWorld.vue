@@ -93,7 +93,7 @@ const createCollection = async () => {    // create a new collection
         urlTemplate: 'https://gateway.pinata.cloud/ipfs/{infix}'
       },
       coverPicture: {
-        ipfsCid: 'QmNiBHiAhsjBXj5cXShDUc5q1dX23CJYrqGGPBNjQCCSXQ'
+        ipfsCid: 'QmfMTg3LitMcKKCCWP7Qa2cE1pMpCn37XPWJajqQTAXwAn'
       },
       attributesSchemaVersion: '1.0.0',
       attributesSchema: {
@@ -116,23 +116,24 @@ const createCollection = async () => {    // create a new collection
   console.log(collectionCreationResult.parsed)
 }
 
+
 const mintToken = async () => {     // Mint token
   const account = accountRef.value
   if(!account) {
     throw new Error('no account')
   }
 
-  const collectionId = 467
+  const collectionId = 660
 
   const tokenResult = await sdk.tokens.create.submitWaitResult( {
     address: account.address,
     collectionId,
     data: {
       image: {
-        ipfsCid: 'QmNiBHiAhsjBXj5cXShDUc5q1dX23CJYrqGGPBNjQCCSXQ'
+        ipfsCid: 'QmfMTg3LitMcKKCCWP7Qa2cE1pMpCn37XPWJajqQTAXwAn'
       },
       encodedAttributes: {
-        0: 0
+        0: 1
       }
     }
   }, {
@@ -140,6 +141,43 @@ const mintToken = async () => {     // Mint token
   })
 
   console.log(tokenResult.parsed)
+}
+
+const nestToken = async() => {
+  const account = accountRef.value
+  if(!account) {
+    throw new Error('no account')
+  }
+
+  const nestTokenResult = await sdk.tokens.nest.submitWaitResult( {
+    address: account.address,
+    parent: {
+      collectionId: 179, 
+      tokenId: 1,  // this token will be the parent of token 1 -> collection 180
+    },
+    nested: {
+      collectionId: 180,
+      tokenId: 1,
+    },
+  }, {
+    signer: account.uniqueSdkSigner
+  })
+
+  console.log(nestTokenResult.parsed)
+}
+
+const checkBundle = async() => {
+  const account = accountRef.value
+  if(!account) {
+    throw new Error('no account')
+  }
+
+  const checkBundleResult: any = await sdk.tokens.getBundle({
+    collectionId: 179,
+    tokenId: 1,
+  })
+
+  console.log('getBundle', checkBundleResult)
 }
 
 
@@ -167,6 +205,8 @@ Hello Unique!
   <br/><button @click = "mintToken">MintToken</button><br/>
   <br/><button @click = "getToken(467,1)">Get Token</button><br/>
   <br/><button @click = "transferToken">Transfer Token</button><br/>
+  <br/><button @click = "nestToken">Nest Token</button><br/>
+  <br/><button @click = "checkBundle">Get Bundle</button><br/>¸
 
 
 </template>
