@@ -133,7 +133,7 @@ const mintToken = async () => {     // Mint token
         ipfsCid: 'QmfMTg3LitMcKKCCWP7Qa2cE1pMpCn37XPWJajqQTAXwAn'
       },
       encodedAttributes: {
-        0: 1
+        0: 0
       }
     }
   }, {
@@ -206,7 +206,7 @@ Hello Unique!
   <br/><button @click = "getToken(467,1)">Get Token</button><br/>
   <br/><button @click = "transferToken">Transfer Token</button><br/>
   <br/><button @click = "nestToken">Nest Token</button><br/>
-  <br/><button @click = "checkBundle">Get Bundle</button><br/>¸
+  <br/><button @click = "checkBundle">Get Bundle</button><br/>
 
 
 </template>
